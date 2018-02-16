@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Document</title>
 </head>
 <body>
+    <iframe id="prueba"></iframe>
     <script>
-        var array=[];
+        /*var array=[];
         for(i=0; i<10;i++){
             var userDataEntry={};
             userDataEntry.id= i;
@@ -16,7 +18,30 @@
             array.push(userDataEntry);
         }
         console.log("se muestra el array");
-        console.log(array);
+        console.log(array);*/
+        var count=0;
+        var array=[];
+        $(document).ready(function(){
+            $("#prueba").contents().find("body").on('click', function(event) {
+                console.log("se dio clic en el iframe");
+                var userDataEntry={};
+                userDataEntry.id=count;
+                userDataEntry.name="name"+count;
+                array.push(userDataEntry);
+                count++;
+                if(count==5){
+                    viewArray();
+                }
+             });
+        });
+        
+        function viewArray(){
+            console.log(array);
+        }
+            
+    
+       // console.log(  document.getElementById("prueba"));
+
     </script>
 </body>
 </html>
