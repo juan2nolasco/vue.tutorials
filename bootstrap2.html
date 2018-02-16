@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Styde.net | Curso de VueJS</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.9/vue.js"></script>
+</head>
+<body>
+    <h1>Hello, Vue!</h1>
+
+    <div id="app">
+        <ul v-for="(note, index) in notes">
+            <li>{{ index }}: {{ note.text }} por {{ note.autor }}</li>
+        </ul>
+
+        <hr>
+
+        <form @submit.prevent="createNote" class="form">
+            <textarea v-model="new_note.text" class="form-control"></textarea>
+            <button type="submit" class="btn btn-primary">Agregar note</button>
+        </form>
+    </div>
+   
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                notes: [
+                     {
+                         text: 'v-for es la directiva que utilizamos para iterar una lista',
+                         autor: 'Dulio'
+                    },
+                     {
+                         text:'@click se utiliza como un alias de v-on:click',
+                         autor: 'Juan'
+                     },
+                     {
+                         text: 'Con Vue puedes crear tus propios componentes',
+                         autor: 'José'
+                    }
+                     
+                ],
+                new_note: {text:'',autor: 'Duilio'}
+            },
+            methods:{
+                createNote: function(){
+                    this.notes.push(this.new_note);
+
+                    this.new_note = {text: '', autor: 'Dulio'};
+                }
+            }
+        });    
+    </script>
+</body>
+</html>

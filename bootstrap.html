@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Styde.net | Curso de VueJS</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.9/vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+            <div class="row"></div>
+            <template v-if="name">
+                    <welcome-message v-bind:name="name" v-bind:gender="gender"></welcome-message>
+                    <p>Espero que disfrutes tu visita</p>
+                    <p>Tu nombre al revés es: {{ name | reverse }}</p>
+            </template>
+            <p v-else>Por favor escribe tu nombre:</p>
+            <form @submit.prevent="signUp(false)">
+                <input type="text" v-model="name" class="form-control">
+                <p v-if="!name" class="alert alert-danger">
+                        Este campo es obligatorio
+                </p>
+                <br>
+                <input type="radio" v-model="gender" name="gender" value="f">Femenino
+                <input type="radio" v-model="gender" name="gender" value="m">Masculino
+                ¿Hablas español?<input type="checkbox" v-model="spanish">
+                <br>
+                <br>
+
+                <years-exp :years.sync="years_php" tech="PHP"></years-exp>
+                <years-exp :years.sync="years_js" tech="JS"></years-exp>
+                
+                <img src="logo.png" :title="years_php">
+                
+            
+                <hr>
+
+                <p v-show="name">
+                        <button type="submit" class="btn btn-primary">
+                            Registrate
+                        </button>
+
+                        <button type="button" class="btn btn-primary" @click="signUp(true)">
+                             Registrate y sal del sistema 
+                        </button>
+                </p>
+                
+            </form>
+
+            <ul v-for="tech in techs | years">
+                <li>{{ tech.name }}</li>
+            </ul>
+            <hr>
+                <hello-world></hello-world>
+                <pre>{{ $data }}</pre>
+    </div>
+    
+    <script type="text/template" id="welcome_template">
+      <h1> {{ name | ucwords }} </h1>
+    </script>
+
+    <script type="text/template" id="years_template">
+    <div>
+        <p>¿Cuántos años de experiencia tienes con {{ tech }}?</p>
+        <p>
+            Respuesta: <strong>{{ years }}</strong>
+            <button type="button" 
+                    class="btn" 
+                    @click="add">+</button>
+            <button type="button" 
+                    :disabled="years == 0"
+                    class="btn"
+                    @click="sub">-</button>
+        </p>
+    </div>
+    </script>
+    
+    <script type="text/javascript">
+
+        Vue.component('hello-world',{
+            template: '<h2>Hello world</h2>'
+        });
+
+        Vue.component('welcome-message',{
+            template:'#welcome_template',
+            props:{
+                gender: {type: String, required: false,  default:'m'},
+                name: {type: String, required: true}
+            },
+            computed:{
+                welcome_message: function (){
+                    if(this.spanish){
+                        return this.gender == 'm' ? 'Bienvenido' : 'Bienvenida';
+                        console.log("entro al de bienvenido");
+                    }else{
+                        return 'welcome';
+                        console.log("entro al de welcome");
+                    }
+
+                    
+                    
+                }
+            },
+            watch: {
+                name: function(name){
+                   // alert(name);
+                }
+            }
+        });
+
+        Vue.filter('ucwords',function(value){
+            return value.split(' ').map(function(word){
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }).join(' ');
+        });
+
+         Vue.filter('reverse', function(value){
+             return value.split('').reverse().join('');
+         })
+
+        Vue.component('years-exp',{
+            template: '#years_template',
+            methods:{
+                add: function(){
+                    this.years++;
+                },
+                sub: function(){
+                    this.years--;
+                },
+            },
+            props: ['years', 'tech'],
+           
+        });
+
+        new Vue({
+            el: "#app",
+            data:{
+                name:"",
+                gender: "m",
+                spanish: true,
+                years_php: 0,
+                years_js: 0,
+                techs:[
+                    {name:'PHP', years: 0},
+                    {name:'JS', years: 0},
+                    {name:'HTML', years: 0},
+                    {name:'CSS', years: 0},
+                    {name:'MySQL', years: 0},
+                ]
+            },
+            methods:{
+                signUp: function(logout){
+                    alert(this.name + ', por favor espera mientras te registramos.');
+
+                    if(logout){ 
+                        alert("Saliendo del sistema...");
+                    }
+                }
+            },
+            filters:{
+                years: function(techs){
+                    return techs.filter(function(tech){
+                        return tech.years > 0;
+                    });
+                }
+            }
+        });
+
+       /* Vue.filter('years', function(techs){
+            return techs.filter(function(tech){
+                return tech.years > 0;
+            });
+        });*/
+    </script>
+</body>
+</html>
